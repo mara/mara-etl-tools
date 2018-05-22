@@ -53,6 +53,17 @@ INSERT INTO euro_fx.exchange_rate
   WHERE exchange_rate IS NULL AND last_exchange_rate IS NOT NULL
   ORDER BY currency, date;
 
+-- Insert an exchange rate of 1 for 'EUR' to simplify subsequent joins
+INSERT INTO euro_fx.exchange_rate
+  SELECT
+    'EUR' AS currency,
+    1     AS exchange_rate,
+    date
+  FROM (
+         SELECT DISTINCT date
+         FROM euro_fx.exchange_rate
+       ) t
+  ORDER BY date;
 
 ANALYZE euro_fx.exchange_rate;
 

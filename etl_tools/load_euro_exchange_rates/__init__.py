@@ -1,6 +1,7 @@
 import pathlib
+import os
 
-from data_integration.commands.python import ExecutePython
+from data_integration.commands.files import ReadScriptOutput
 from data_integration.commands.sql import ExecuteSQL
 from data_integration.pipelines import Pipeline, Task
 
@@ -20,7 +21,8 @@ def euro_exchange_rates_pipeline(db_alias: str):
 
     pipeline.add(
         Task(id='load_exchange_rate', description='Loads exchange rates from the European central bank',
-             commands=[ExecutePython(file_name='load_exchange_rate.py', args=[db_alias])]),
+             commands=[ReadScriptOutput(file_name='load_exchange_rate.py', target_table='euro_fx.exchange_rate',
+                       db_alias='mdwh-etl')]),
         upstreams=['create_schema_and_table'])
 
     pipeline.add(
