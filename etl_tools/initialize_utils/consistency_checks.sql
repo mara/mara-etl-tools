@@ -50,7 +50,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises a warning when the evaluation of two number-returning queries does not lead to the same result
+-- raises an exception when the evaluation of two number-returning queries does not lead to the same result
 CREATE FUNCTION util.assert_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -60,7 +60,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises a warning when the evaluation of two number-returning queries leads to the same result
+-- raises an exception when the evaluation of two number-returning queries leads to the same result
 CREATE FUNCTION util.assert_not_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -70,7 +70,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises a warning when the evaluation of query is bigger than the result of query 2
+-- raises an exception when the evaluation of query is bigger than the result of query 2
 CREATE FUNCTION util.assert_smaller_than_or_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -80,7 +80,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises a warning when the evaluation of query is smaller than the result of query 2
+-- raises an exception when the evaluation of query is smaller than the result of query 2
 CREATE FUNCTION util.assert_bigger_than_or_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -91,7 +91,7 @@ LANGUAGE 'plpgsql';
 
 
 
--- raises a warning when the second query returns a value that is more than a percentage different than the first one
+-- raises an exception when the second query returns a value that is more than a percentage different than the first one
 CREATE FUNCTION util.assert_almost_equal(description TEXT,
                                          percentage  DECIMAL,
                                          query1      TEXT,
@@ -111,7 +111,7 @@ BEGIN
   INTO succeeded;
   IF NOT succeeded
   THEN
-    RAISE WARNING '%
+    RAISE EXCEPTION '%
 assertion failed: abs(% - %) - % < %
 %: (%)
 %: (%)', description, result2, result1, result1, percentage, result1, query1, result2, query2;
@@ -142,7 +142,7 @@ BEGIN
 
   IF result IS NOT NULL
   THEN
-    RAISE WARNING 'assertion %, failed for:
+    RAISE EXCEPTION 'assertion %, failed for:
 %', description, result;
   END IF;
   RETURN result IS NULL;
