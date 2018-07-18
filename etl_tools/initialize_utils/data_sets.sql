@@ -9,7 +9,7 @@ DECLARE column_name_ TEXT;
 BEGIN
   EXECUTE 'DROP TABLE IF EXISTS ' || schema_name_ || '.' || table_name_ || '_attributes';
   EXECUTE 'CREATE TABLE ' || schema_name_ || '.' || table_name_ ||
-          '_attributes (attribute TEXT NOT NULL, value TEXT NOT NULL);';
+          '_attributes (attribute TEXT NOT NULL, value TEXT NOT NULL, row_count BIGINT);';
 
   FOR column_name_ IN
   WITH enums AS (
@@ -29,9 +29,10 @@ BEGIN
 
   LOOP
     EXECUTE 'INSERT INTO ' || schema_name_ || '.' || table_name_ || '_attributes ' ||
-            'SELECT DISTINCT ''' || column_name_ || ''', "' || column_name_ ||
-            '" FROM ' || schema_name_ || '.' || table_name_ ||
-            ' WHERE "' || column_name_ || '" IS NOT NULL ORDER BY "' || column_name_ || '"';
+            'SELECT ''' || column_name_ || ''', "' || column_name_ ||
+            '", count(*) FROM ' || schema_name_ || '.' || table_name_ ||
+            ' WHERE "' || column_name_ || '" IS NOT NULL GROUP BY "' || column_name_
+            || '" ORDER BY "' || column_name_ || '"';
   END LOOP;
 
   EXECUTE 'CREATE INDEX ' || table_name_ || '_attributes__attribute ON ' ||
