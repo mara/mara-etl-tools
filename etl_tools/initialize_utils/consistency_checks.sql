@@ -1,7 +1,7 @@
--- Functions for checking the consistency and correctness of data
+/** Functions for checking the consistency and correctness of data */
 
 
--- raises an exception when a boolean expression does not evaluate to t
+/** Raises an exception when a boolean expression does not evaluate to t */
 CREATE FUNCTION util.assert(description TEXT, query TEXT)
   RETURNS BOOLEAN AS $$
 DECLARE
@@ -21,7 +21,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises an exception when the evaluation of two number-returning queries does not satisfy the given constraint
+/** raises an exception when the evaluation of two number-returning queries does not satisfy the given constraint */
 CREATE FUNCTION util.assert_relation(description TEXT,
                                      query1      TEXT, query2 TEXT,
                                      relation    TEXT)
@@ -50,7 +50,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises an exception when the evaluation of two number-returning queries does not lead to the same result
+/** raises an exception when the evaluation of two number-returning queries does not lead to the same result */
 CREATE FUNCTION util.assert_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -60,7 +60,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises an exception when the evaluation of two number-returning queries leads to the same result
+/** raises an exception when the evaluation of two number-returning queries leads to the same result */
 CREATE FUNCTION util.assert_not_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -70,7 +70,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises an exception when the evaluation of query is bigger than the result of query 2
+/** raises an exception when the evaluation of query 1 is bigger than the result of query 2 */
 CREATE FUNCTION util.assert_smaller_than_or_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -80,7 +80,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- raises an exception when the evaluation of query is smaller than the result of query 2
+/** raises an exception when the evaluation of query is smaller than the result of query 2 */
 CREATE FUNCTION util.assert_bigger_than_or_equal(description TEXT, query1 TEXT, query2 TEXT)
   RETURNS BOOLEAN AS $$
 BEGIN
@@ -90,8 +90,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
-
--- raises an exception when the second query returns a value that is more than a percentage different than the first one
+/** raises an exception when the second query returns a value that is more than a percentage different than the first one */
 CREATE FUNCTION util.assert_almost_equal(description TEXT,
                                          percentage  DECIMAL,
                                          query1      TEXT,
@@ -122,11 +121,11 @@ $$
 LANGUAGE 'plpgsql';
 
 
+/**
+ Takes a query that returns all rows that fail a consistency check.
 
-
--- Takes a query that returns all rows that fail a consistency check.
--- This function will fail if the query returns any results
-
+ This function will fail if the query returns any results.
+ */
 CREATE OR REPLACE FUNCTION util.assert_not_found(description TEXT,
                                                  query       TEXT)
   RETURNS BOOLEAN AS $$

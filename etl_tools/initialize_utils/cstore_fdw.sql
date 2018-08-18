@@ -1,4 +1,4 @@
--- functions for interacting with the cstore foreign data wrapper (https://github.com/citusdata/cstore_fdw)
+/** functions for interacting with the cstore foreign data wrapper (https://github.com/citusdata/cstore_fdw) */
 
 
 -- requires manual installation of extension
@@ -15,7 +15,7 @@ BEGIN
 END$$;
 
 
--- creates a cstore fdw table from a view
+/** creates a cstore fdw table from a view */
 CREATE OR REPLACE FUNCTION util.create_cstore_fdw_table(_table_schema TEXT, _table_name TEXT, _view_schema TEXT,
                                                         _view_name    TEXT)
   RETURNS VOID AS $$
@@ -32,8 +32,11 @@ OPTIONS(compression ''pglz'');';
 END;
 $$ LANGUAGE plpgsql;
 
--- creates a cstore fdw table as a partition of a normal table
--- (so that the cstore table is visible in database clients that can't process foreign tables)
+
+/**
+ creates a cstore fdw table as a partition of a normal table
+ (so that the cstore table is visible in database clients that can't process foreign tables)
+  */
 CREATE OR REPLACE FUNCTION util.create_cstore_partition(schema_name TEXT, table_name TEXT)
   RETURNS VOID AS $$
 BEGIN

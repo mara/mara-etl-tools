@@ -1,4 +1,4 @@
--- Initializes the HyperLogLog extension from https://github.com/citusdata/postgresql-hll
+/** Initializes the HyperLogLog extension from https://github.com/citusdata/postgresql-hll */
 
 CREATE EXTENSION IF NOT EXISTS hll;
 

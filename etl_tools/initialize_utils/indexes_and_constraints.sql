@@ -1,7 +1,7 @@
--- functions for adding constraints and indexes that also work with partitioned tables
+/** Functions for adding constraints and indexes that also work with partitioned tables */
 
 
--- helper function for retrieving all inherited tables of a table
+/** A helper function for retrieving all inherited tables of a table */
 CREATE OR REPLACE FUNCTION util.get_inherited_tables(schema_name          TEXT,
                                                      table_name           TEXT,
   OUT                                                inherited_table_name TEXT)
@@ -19,7 +19,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- retrieves all columns of a table following a pattern
+/** Retrieves all columns of a table following a pattern */
 CREATE OR REPLACE FUNCTION util.get_columns(schema_name TEXT, table_name TEXT, pattern TEXT DEFAULT '%')
   RETURNS SETOF TEXT AS $$
 BEGIN
@@ -35,19 +35,24 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- adds an index to a table.
--- if the table has inherited tables, then the function is called on each child table
--- partition_id: used to avoid concatenating the _## to the table name in an ugly manner
--- column_names: a list of columns
--- expression: a function for a function index
--- replace_: whether to replace existing index
--- unique_: when true, then create a unique index
--- method: btree, hash or brin
--- partial_condition: an SQL expression that returns a boolean value. When it evaluates to true for the row,
---      the row is included in the index. Makes for smaller indexes (good for RAM and disk, and speed)
--- index_name: pass a name for the index, for long indexes that we might want to cluster on
--- analyze_: whether to perform an ANALYZE of the table after adding the index
--- cluster_: whether to cluster on the newly created index
+/**
+Adds an index to a table.
+
+If the table has inherited tables, then the function is called on each child table
+
+Parameters:
+  partition_id: used to avoid concatenating the _## to the table name in an ugly manner
+  column_names: a list of columns
+  expression: a function for a function index
+  replace_: whether to replace existing index
+  unique_: when true, then create a unique index
+  method: btree, hash or brin
+  partial_condition: an SQL expression that returns a boolean value. When it evaluates to true for the row,
+         the row is included in the index. Makes for smaller indexes (good for RAM and disk, and speed)
+  index_name: pass a name for the index, for long indexes that we might want to cluster on
+  analyze_: whether to perform an ANALYZE of the table after adding the index
+  cluster_: whether to cluster on the newly created index
+*/
 CREATE OR REPLACE FUNCTION util.add_index(schema_name       TEXT,
                                           table_name        TEXT,
                                           partition_id      SMALLINT DEFAULT NULL,
@@ -148,7 +153,7 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- adds indexes to all foreign keys of a table (column name = '*_fk')
+/** Adds indexes to all foreign keys of a table (column name = '*_fk') */
 CREATE OR REPLACE FUNCTION util.add_indexes_on_all_fks(schema_name      TEXT,
                                                        table_name       TEXT,
                                                        method           TEXT DEFAULT 'brin',
@@ -174,7 +179,11 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- adds a primary key to a table
+/**
+Ads a primary key to a table
+
+Assumes that the table has a <table_name>_id column that is the primary key
+*/
 CREATE FUNCTION util.add_pk(schema_name TEXT, table_name TEXT)
   RETURNS VOID AS $$
 BEGIN
@@ -185,8 +194,11 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- adds a foreign key from one table to another table
--- if the source table has inheritance children, then the function is called on each of them
+/**
+Adds a foreign key from one table to another table.
+
+If the source table has inheritance children, then the function is called on each of them.
+ */
 CREATE OR REPLACE FUNCTION util.add_fk(source_schema_name TEXT,
                                        source_table_name  TEXT,
                                        source_column_name TEXT,
@@ -214,9 +226,11 @@ $$
 LANGUAGE 'plpgsql';
 
 
--- adds a foreign key from on table to another table
--- if the other table is called foo, then for foreign key has
---  to be named foo_fk and the primary key foo_id
+/**
+Adds a foreign key from on table to another table
+
+Assumes that if the other table is called foo, then for foreign key has to be named foo_fk and the primary key foo_id
+ */
 CREATE FUNCTION util.add_fk(source_schema_name TEXT, source_table_name TEXT,
                             target_schema_name TEXT, target_table_name TEXT)
   RETURNS VOID AS $$
@@ -226,8 +240,11 @@ $$
 LANGUAGE SQL;
 
 
--- adds a check constraint to a table
--- expression: textual representation of the check expression
+/**
+Adds a check constraint to a table
+
+  expression: textual representation of the check expression
+*/
 CREATE OR REPLACE FUNCTION util.add_check(schema_name  TEXT,
                                           table_name   TEXT,
                                           partition_id SMALLINT,

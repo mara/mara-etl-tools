@@ -1,8 +1,10 @@
--- creation of attribute lookup tables for data sets
+/** creation of attribute lookup tables for flat data set tables */
 
+-- needed to create indexes for auto-completion
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
--- creates a table optimized for the auto-completion of data set attributes
+
+/** creates a table optimized for the auto-completion of data set attributes */
 CREATE OR REPLACE FUNCTION util.create_data_set_attributes_table(schema_name_ TEXT, table_name_ TEXT)
   RETURNS VOID AS $$
 DECLARE column_name_ TEXT;
@@ -43,6 +45,7 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
 
 -- the same as util.create_data_set_attributes_table but changed for parallel execution
 -- before

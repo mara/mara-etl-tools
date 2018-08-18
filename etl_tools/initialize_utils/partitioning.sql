@@ -1,7 +1,7 @@
--- functions for managing table partitions
+/** Functions for managing table partitions */
 
 
--- adds for each key returned by key_query a native (Postgresql 10) partition to table_name
+/** Adds for each key returned by key_query a native (Postgresql 10) partition to table_name */
 CREATE OR REPLACE FUNCTION util.create_table_partitions(schemaname TEXT,
                                                         tablename  TEXT,
                                                         key_query  TEXT)

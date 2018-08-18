@@ -1,7 +1,7 @@
--- functions for replacing schemas with their next version
+/** functions for replacing schemas with their next version */
 
 
--- cancels all processes that hold any kind of lock on tables in "schema"
+/** cancels all processes that hold any kind of lock on tables in "schema" */
 CREATE OR REPLACE FUNCTION util.cancel_queries_on_schema(schema TEXT)
   RETURNS BOOLEAN AS $$
 SELECT pg_cancel_backend(pid)
@@ -17,7 +17,7 @@ $$ LANGUAGE SQL;
 
 
 
--- replaces schema "schemaname" with "replace_with"
+/** replaces schema "schemaname" with "replace_with" */
 CREATE OR REPLACE FUNCTION util.replace_schema(schemaname TEXT, replace_with TEXT)
   RETURNS VOID AS $$
 DECLARE foreign_table TEXT;
