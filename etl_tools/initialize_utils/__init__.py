@@ -37,7 +37,7 @@ def utils_pipeline(with_hll=False, with_cstore_fdw=False):
                  ]))
 
     for file_name_without_extension in ['consistency_checks', 'data_sets', 'partitioning',
-                                        'indexes_and_constraints',  'schema_switching']:
+                                        'indexes_and_constraints',  'schema_switching', 'enums']:
         add_task_for_file(file_name_without_extension)
 
     if with_hll:

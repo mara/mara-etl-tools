@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 (2018-08-18)
+## 1.1.0 - 1.1.1 (2018-08-18)
 
 - Implement copying of PostgreSQL database schemas
 - Add functions for creating and updating enums
