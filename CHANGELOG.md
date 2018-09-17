@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 (2018-09-17)
+
+- Add `year_name` and `iso_year_name` to `time.day` table
+
+**Required changes**
+
+- Adapt ETL, especially when selecting `time.day.*`
+
+
 ## 1.1.0 - 1.1.2 (2018-08-18)
 
 - Implement copying of PostgreSQL database schemas
