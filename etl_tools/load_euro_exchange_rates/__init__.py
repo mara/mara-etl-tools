@@ -22,7 +22,7 @@ def euro_exchange_rates_pipeline(db_alias: str):
     pipeline.add(
         Task(id='load_exchange_rate', description='Loads exchange rates from the European central bank',
              commands=[ReadScriptOutput(file_name='load_exchange_rate.py', target_table='euro_fx.exchange_rate',
-                       db_alias='mdwh-etl')]),
+                       db_alias=db_alias)]),
         upstreams=['create_schema_and_table'])
 
     pipeline.add(
