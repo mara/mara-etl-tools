@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='etl-tools',
 
-    version='1.2.0',
+    version='1.2.1',
 
     description='Utilities for creating ETL pipelines with mara',
 

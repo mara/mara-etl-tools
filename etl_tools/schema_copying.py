@@ -65,6 +65,9 @@ class ParallelCopySchema(ParallelTask):
         assert (isinstance(source_db, mara_db.dbs.PostgreSQLDB))
         assert (isinstance(target_db, mara_db.dbs.PostgreSQLDB))
 
+        with mara_db.postgresql.postgres_cursor_context(self.source_db_alias) as cursor:
+            pg_version = cursor.connection.server_version
+
         ddl_task = Task(
             id='create_tables_and_functions',
             description='Re-creates the schema, tables structure and functions on the target db',
@@ -82,7 +85,9 @@ class ParallelCopySchema(ParallelTask):
                 bash.RunBash(
                     command=f'''echo "
 SELECT CONCAT(pg_get_functiondef(pg_proc.oid),';') AS def 
-FROM (SELECT oid, * FROM pg_proc p WHERE NOT p.proisagg) pg_proc, pg_namespace
+FROM (SELECT oid, * 
+      FROM pg_proc p 
+      WHERE {"p.prokind in ('p','f')" if pg_version >= 110000 else "NOT p.proisagg"}) pg_proc, pg_namespace
 WHERE pg_proc.pronamespace = pg_namespace.oid
      AND nspname = '{self.schema_name}'" \\\n'''
                             + "  | " + mara_db.shell.copy_to_stdout_command(self.source_db_alias) + ' \\\n'
