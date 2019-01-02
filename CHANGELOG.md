@@ -1,9 +1,10 @@
 # Changelog
 
-## 1.2.0 - 1.2.1 (2018-09-17)
+## 1.2.0 - 1.2.2 (2018-09-17)
 
 - Add `year_name` and `iso_year_name` to `time.day` table
 - Make schema copying work in PostgreSQL 11 (column `pg_proc.proisagg` was removed)
+- Fix bug in `load_euro_exchange_rates` pipeline
 
 **Required changes**
 
