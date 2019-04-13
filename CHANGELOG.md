@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0 (2019-04-13)
+
+- Change MARA_XXX variables to functions to delay importing of imports
+
+**required changes** 
+
+- Update `mara-app` to `>=2.0.0`
+
+
 ## 1.2.0 - 1.2.2 (2018-09-17)
 
 - Add `year_name` and `iso_year_name` to `time.day` table
