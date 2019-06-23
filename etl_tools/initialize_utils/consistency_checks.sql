@@ -148,3 +148,42 @@ BEGIN
 END
 $$
 LANGUAGE 'plpgsql';
+
+-- raises an EXCEPTION when i_query2 returns an array with an element more than delta different from i_query1
+CREATE FUNCTION util.assert_almost_equal_array(i_description TEXT,
+                                               i_query1      TEXT,
+                                               i_query2      TEXT,
+                                               i_delta       DECIMAL
+)
+
+  RETURNS BOOLEAN AS $$
+DECLARE
+  result1    DOUBLE PRECISION [];
+  result2    DOUBLE PRECISION [];
+  num_errors INTEGER;
+BEGIN
+  EXECUTE i_query1
+    INTO result1;
+  EXECUTE i_query2
+    INTO result2;
+
+
+  EXECUTE 'SELECT count(1)
+FROM (
+       SELECT unnest(''' || result1 :: TEXT || ''' :: DOUBLE PRECISION [])
+              - unnest(''' || result2 :: TEXT || ''' :: DOUBLE PRECISION [])
+         AS diff
+     ) x
+WHERE abs(x.diff) > ' || i_delta
+    INTO num_errors;
+  IF num_errors > 0
+  THEN
+    RAISE EXCEPTION '%
+assertion failed: (% - %) < %
+%: (%)
+%: (%)', i_description, result2, result1, i_delta, result1, i_query1, result2, i_query2;
+  END IF;
+  RETURN num_errors = 0;
+END
+$$
+  LANGUAGE 'plpgsql';
