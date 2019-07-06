@@ -1,9 +1,11 @@
 """Parallel creation of an attribute lookup table for another table (e.g. for auto-completion)"""
 
-import re
+import math
 
 import data_integration.config
+import data_integration.config
 import mara_db.postgresql
+import more_itertools
 from data_integration.commands.sql import ExecuteSQL
 from data_integration.pipelines import Pipeline, ParallelTask, Task
 from mara_page import _
@@ -63,6 +65,8 @@ CREATE TABLE {attributes_table_name} (
 ) PARTITION BY LIST (attribute);
 '''
 
+        commands = []
+
         with mara_db.postgresql.postgres_cursor_context(self.db_alias) as cursor:  # type: psycopg2.extensions.cursor
             cursor.execute(f'''
 WITH enums AS (
@@ -88,11 +92,8 @@ FROM information_schema.columns
                 ddl += f"""
 CREATE TABLE {attributes_table_name}_{i} PARTITION OF {attributes_table_name} FOR VALUES IN ('{column_name}');
 """
-                sub_pipeline.add(Task(
-                    id=re.sub('\W+', '_', column_name.lower()),
-                    description=f'Extracts attributes for the {column_name} column',
-                    commands=[
-                        ExecuteSQL(sql_statement=f'''
+                commands.append(
+                    ExecuteSQL(sql_statement=f'''
 INSERT INTO {attributes_table_name}_{i} 
 SELECT '{column_name}', "{column_name}", count(*)
 FROM {self.source_schema_name}.{self.source_table_name}
@@ -102,13 +103,17 @@ ORDER BY "{column_name}";
 
 CREATE INDEX {self.source_table_name}_{self.attributes_table_suffix}_{i}__value 
    ON {attributes_table_name}_{i} USING GIN (value gin_trgm_ops);
-''', echo_queries=False)
-                    ]))
+''', echo_queries=False))
 
         sub_pipeline.add_initial(
             Task(id='create_table', description='Creates the attributes table',
-                 commands=[ExecuteSQL(sql_statement=ddl)]))
+                 commands=[ExecuteSQL(sql_statement=ddl, echo_queries=False)]))
 
+        chunk_size = math.ceil(len(commands) / (2 * data_integration.config.max_number_of_parallel_tasks()))
+        for n, chunk in enumerate(more_itertools.chunked(commands, chunk_size)):
+            task = Task(id=str(n), description='Process a portion of the attributes')
+            task.add_commands(chunk)
+            sub_pipeline.add(task)
 
     def html_doc_items(self) -> [(str, str)]:
         return [('db', _.tt[self.db_alias]),
