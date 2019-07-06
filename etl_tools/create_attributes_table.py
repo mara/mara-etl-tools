@@ -52,10 +52,8 @@ class CreateAttributesTable(ParallelTask):
 
     def add_parallel_tasks(self, sub_pipeline: Pipeline) -> None:
         attributes_table_name = f'{self.source_schema_name}.{self.source_table_name}{self.attributes_table_suffix}'
-        sub_pipeline.add_initial(
-            Task(id='create_table', description='Creates the attributes table',
-                 commands=[
-                     ExecuteSQL(sql_statement=f'''
+
+        ddl = f'''
 DROP TABLE IF EXISTS {attributes_table_name};
 
 CREATE TABLE {attributes_table_name} (
@@ -63,8 +61,7 @@ CREATE TABLE {attributes_table_name} (
     value     TEXT NOT NULL, 
     row_count BIGINT NOT NULL
 ) PARTITION BY LIST (attribute);
-''')
-                 ]))
+'''
 
         with mara_db.postgresql.postgres_cursor_context(self.db_alias) as cursor:  # type: psycopg2.extensions.cursor
             cursor.execute(f'''
@@ -88,13 +85,14 @@ FROM information_schema.columns
 
             for column_name, in cursor.fetchall():
                 i += 1
+                ddl += f"""
+CREATE TABLE {attributes_table_name}_{i} PARTITION OF {attributes_table_name} FOR VALUES IN ('{column_name}');
+"""
                 sub_pipeline.add(Task(
                     id=re.sub('\W+', '_', column_name.lower()),
                     description=f'Extracts attributes for the {column_name} column',
                     commands=[
                         ExecuteSQL(sql_statement=f'''
-CREATE TABLE {attributes_table_name}_{i} PARTITION OF {attributes_table_name} FOR VALUES IN ('{column_name}');
-
 INSERT INTO {attributes_table_name}_{i} 
 SELECT '{column_name}', "{column_name}", count(*)
 FROM {self.source_schema_name}.{self.source_table_name}
@@ -106,6 +104,11 @@ CREATE INDEX {self.source_table_name}_{self.attributes_table_suffix}_{i}__value
    ON {attributes_table_name}_{i} USING GIN (value gin_trgm_ops);
 ''', echo_queries=False)
                     ]))
+
+        sub_pipeline.add_initial(
+            Task(id='create_table', description='Creates the attributes table',
+                 commands=[ExecuteSQL(sql_statement=ddl)]))
+
 
     def html_doc_items(self) -> [(str, str)]:
         return [('db', _.tt[self.db_alias]),
