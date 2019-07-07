@@ -18,5 +18,5 @@ deploy:
   on:
     tags: true
     branch: master
-    repo: mara/etl-tools
+    repo: mara/mara-etl-tools
     condition: "$UPLOAD == True"
