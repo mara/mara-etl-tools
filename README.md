@@ -1,4 +1,9 @@
-# ETL Utils
+# Mara ETL Tools
+
+[![Build Status](https://travis-ci.org/mara/mara-etl-tools.svg?branch=master)](https://travis-ci.org/mara/mara-etl-tools)
+[![PyPI - License](https://img.shields.io/pypi/l/mara-etl-tools.svg)](https://github.com/mara/mara-etl-tools/blob/master/LICENSE)
+[![PyPI version](https://badge.fury.io/py/mara-etl-tools.svg)](https://badge.fury.io/py/mara-etl-tools)
+[![Slack Status](https://img.shields.io/badge/slack-join_chat-white.svg?logo=slack&style=social)](https://communityinviter.com/apps/mara-users/public-invite)
 
 A collection of utilities around [Project A](https://project-a.com/)'s best practices for creating [data integration](https://github.com/mara/data-integration) pipelines with mara. The package is intended as a start for new projects. Forks/ copies are preferred over PRs.
 
