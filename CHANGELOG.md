@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0 (2019-07-07)
+
+- Rename package from `etl-tools` to `mara-etl-tools` to avoid a PyPi name conflict.
+- Avoid deadlocks in data set attribute table creation
+
+**required-changes** 
+
+- Adapt your requirements.txt like this: `-e git+https://github.com/mara/mara-etl-tools.git@3.0.0#egg=etl-tools
+`
+
+
 ## 2.0.0 (2019-04-13)
 
 - Change MARA_XXX variables to functions to delay importing of imports
