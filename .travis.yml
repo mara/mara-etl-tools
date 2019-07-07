@@ -1,0 +1,22 @@
+language: python
+dist: xenial
+matrix:
+  include:
+  - python: '3.6'
+  - python: '3.7'
+    env: UPLOAD=True
+  - python: 3.7-dev
+install:
+- pip install .[test]
+script: echo hello world
+deploy:
+  provider: pypi
+  distributions: sdist
+  user: mara-pypi-upload-account
+  password:
+    secure: WNcjaIikDuhrGytKlGdEGaV16z8Wt+8cgZeSkYHkyZ0hwJwhFvkFkR49i6sApsStOC+EJrX2f+2TzFWADo9A6cvXxpq1zQvqEOwZu0FO58x66voVfqf7rVnzhytWQ4evw9EHV6HBTKYFw4p8ddRIxSePKZk6FKAudFdoCTSYdrRwHHDZYxc2BD4K3k0sLs4h/t5qAThAF0QZ8zYw9R/oGzw+sJMmXJcbpLLUI7dM8/tY4htrGVQNJayEtAHHIMfSCl8lrHfEXXPoDa9CgC8IpRjdfEJnNt81V8eQVxMtQH0F6z5WwnW5ZS0ZkMO5bkcMmpGwx2WbNjup9k8OmUWXPAQPAZrdSyWlSzQldCi7IUwMg+yxxb9iaD0T2zHkozBcfJ9PsAijZ5LN5MLsV2/OTgLH3GNeOr2/LrZSG6J2kyPKptmwxacOvgTbCe5syEDb29I6WHfJYl5I/Qs6LbhnOiiYbHtXpwf92DnQtTc1bIHVSt810xM0sso7ollAvM0JhaC4kvQ7hzapgrtDMLMOSydqTJJRb+Xgjwqg1DAc7E0CJVNEFGC7L8AuxHwvFTarmOXMmBnVZBEj3RBIM97eOtekm/E0JQFeFCNh8H/kRKr1nmod+YK3Edrqwn9x2T4HsT1WpJtkqZe0qlJ5etR9r9XHAkmvwoY5fSSQKoQSHUk=
+  on:
+    tags: true
+    branch: master
+    repo: mara/etl-tools
+    condition: "$UPLOAD == True"
