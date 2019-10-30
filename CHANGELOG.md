@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.1 (2019-10-30)
+
+- add `etl_tools.schema_check.AbortOnSchemaMisuse(schema_name)` Command
+  and the helper
+  `etl_tools.schema_check.add_schema_misuse_check_as_first_command_in_initial_task(pipeline)`
+  which adds it as first command in the intial task in every (sub-) pipeline
+  which has a `'Schema'` label.
+
+
 ## 3.0.0 (2019-07-07)
 
 - Rename package from `etl-tools` to `mara-etl-tools` to avoid a PyPi name conflict.
