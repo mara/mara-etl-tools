@@ -85,7 +85,7 @@ class ParallelCopySchema(ParallelTask):
                 bash.RunBash(
                     command=f'''echo "
 SELECT CONCAT(pg_get_functiondef(pg_proc.oid),';') AS def 
-FROM (SELECT oid, * 
+FROM (SELECT oid, prokind, pronamespace
       FROM pg_proc p 
       WHERE {"p.prokind in ('p','f')" if pg_version >= 110000 else "NOT p.proisagg"}) pg_proc, pg_namespace
 WHERE pg_proc.pronamespace = pg_namespace.oid
