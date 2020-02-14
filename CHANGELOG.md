@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0 (2020-02-14)
+
+- get schema copying working on PostgreSQL 12
+- get function create_enum working on PostgreSQL 12
+
+
 ## 3.0.1 (2019-10-30)
 
 - add `etl_tools.schema_check.AbortOnSchemaMisuse(schema_name)` Command
