@@ -105,13 +105,13 @@ BEGIN
   INTO result1;
   EXECUTE query2
   INTO result2;
-  EXECUTE 'SELECT coalesce( abs(' || result2 || ' - ' || result1 || ') / nullif(' || result1 || ', 0), 0 ) < ' ||
+  EXECUTE 'SELECT coalesce( abs((' || result2 || ' - ' || result1 || ') / nullif(' || result1 || ', 0)), 0 ) < ' ||
           percentage
   INTO succeeded;
   IF NOT succeeded
   THEN
     RAISE EXCEPTION '%
-assertion failed: abs(% - %) - % < %
+assertion failed: abs((% - %) / %) < %
 %: (%)
 %: (%)', description, result2, result1, result1, percentage, result1, query1, result2, query2;
   END IF;
