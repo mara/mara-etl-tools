@@ -29,3 +29,23 @@ $$
 LANGUAGE plpgsql;
 
 
+/** Adds evenly-distributed table partitions by hash (introduced in Postgres 11) to a given table_name and schema_name */
+CREATE OR REPLACE FUNCTION util.create_table_hash_partitions(schema_name TEXT,
+                                                             table_name TEXT,
+                                                             partitions INT)
+    RETURNS VOID AS
+$$
+DECLARE
+    i      INT;
+    target INT;
+BEGIN
+    target := partitions - 1;
+    FOR i IN 0..target
+        LOOP
+            EXECUTE ' CREATE TABLE ' || schema_name || '.' || table_name || '_' || i ||
+                    ' PARTITION OF ' || schema_name || '.' || table_name ||
+                    ' FOR VALUES WITH (MODULUS ' || partitions || ', REMAINDER ' || i || ')';
+
+        END LOOP;
+END ;
+$$ LANGUAGE plpgsql
