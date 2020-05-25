@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.1 (2020-05-25)
+
+- Fix assert_almost_equal function on handling negative results
+
+
 ## 3.1.0 (2020-02-14)
 
 - get schema copying working on PostgreSQL 12
