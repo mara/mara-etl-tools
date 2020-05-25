@@ -13,7 +13,7 @@ setup(
 
     url = 'https://github.com/mara/mara-etl-tools',
 
-    version='3.1.0',
+    version='3.1.1',
 
     description='Utilities for creating ETL pipelines with mara',
 
