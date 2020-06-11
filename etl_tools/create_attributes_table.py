@@ -2,12 +2,12 @@
 
 import math
 
-import data_integration.config
-import data_integration.config
+import mara_pipelines.config
+import mara_pipelines.config
 import mara_db.postgresql
 import more_itertools
-from data_integration.commands.sql import ExecuteSQL
-from data_integration.pipelines import Pipeline, ParallelTask, Task
+from mara_pipelines.commands.sql import ExecuteSQL
+from mara_pipelines.pipelines import Pipeline, ParallelTask, Task
 from mara_page import _
 
 
@@ -50,7 +50,7 @@ class CreateAttributesTable(ParallelTask):
         self.source_schema_name = source_schema_name
         self.source_table_name = source_table_name
         self.attributes_table_suffix = attributes_table_suffix
-        self.db_alias = db_alias or data_integration.config.default_db_alias()
+        self.db_alias = db_alias or mara_pipelines.config.default_db_alias()
 
     def add_parallel_tasks(self, sub_pipeline: Pipeline) -> None:
         attributes_table_name = f'{self.source_schema_name}.{self.source_table_name}{self.attributes_table_suffix}'
@@ -109,7 +109,7 @@ CREATE INDEX {self.source_table_name}_{self.attributes_table_suffix}_{i}__value
             Task(id='create_table', description='Creates the attributes table',
                  commands=[ExecuteSQL(sql_statement=ddl, echo_queries=False)]))
 
-        chunk_size = math.ceil(len(commands) / (2 * data_integration.config.max_number_of_parallel_tasks()))
+        chunk_size = math.ceil(len(commands) / (2 * mara_pipelines.config.max_number_of_parallel_tasks()))
         for n, chunk in enumerate(more_itertools.chunked(commands, chunk_size)):
             task = Task(id=str(n), description='Process a portion of the attributes')
             task.add_commands(chunk)

@@ -13,12 +13,12 @@ setup(
 
     url = 'https://github.com/mara/mara-etl-tools',
 
-    version='3.1.1',
+    version='4.0.0',
 
     description='Utilities for creating ETL pipelines with mara',
 
     install_requires=[
-        'data_integration>=2.0.0',
+        'mara-pipelines>=3.0.0',
     ],
 
     python_requires='>=3.6',

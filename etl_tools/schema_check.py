@@ -1,4 +1,4 @@
-from data_integration import pipelines
+from mara_pipelines import pipelines
 
 
 class AbortOnSchemaMisuse(pipelines.Command):
@@ -16,8 +16,8 @@ class AbortOnSchemaMisuse(pipelines.Command):
         self.pattern = f'{schema_name}\.'
 
     def run(self):
-        from data_integration import shell
-        from data_integration.logging import logger
+        from mara_pipelines import shell
+        from mara_pipelines.logging import logger
         pipeline_base_directory = self.parent.parent.base_path()
         excludes = ' --exclude=__init__.py --exclude=\*.md --exclude=\*.pyc'
         # cd'ing && grepping in . allows us to show short filenames

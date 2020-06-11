@@ -5,9 +5,9 @@
 [![PyPI version](https://badge.fury.io/py/mara-etl-tools.svg)](https://badge.fury.io/py/mara-etl-tools)
 [![Slack Status](https://img.shields.io/badge/slack-join_chat-white.svg?logo=slack&style=social)](https://communityinviter.com/apps/mara-users/public-invite)
 
-A collection of utilities around [Project A](https://project-a.com/)'s best practices for creating [data integration](https://github.com/mara/data-integration) pipelines with mara. The package is intended as a start for new projects. Forks/ copies are preferred over PRs.
+A collection of utilities around [Project A](https://project-a.com/)'s best practices for creating [data integration pipelines](https://github.com/mara/mara-pipelines) with Mara. The package is intended as a start for new projects. Forks/ copies are preferred over PRs.
 
-For more details on how to use this package, have a look at the [mara example project](https://github.com/mara/mara-example-project).
+For more details on how to use this package, have a look at the [mara example project 1](https://github.com/mara/mara-example-project-1) and [mara example project 2](https://github.com/mara/mara-example-project-2).
 
 
 The package consists of a number modules that all can be used independently from each other:
@@ -34,8 +34,8 @@ Given that there is a pipline `my_pipeline` that has a number of child pipelines
 
 ```python
 from mara_db import dbs
-from data_integration.commands.sql import ExecuteSQL
-from data_integration.pipelines import Task
+from mara_pipelines.commands.sql import ExecuteSQL
+from mara_pipelines.pipelines import Task
 from etl_tools.schema_copying import add_schema_copying_to_pipeline
 
 # when etl und frontend db are different, add schema copying

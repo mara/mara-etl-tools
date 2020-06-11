@@ -1,9 +1,9 @@
 import pathlib
 import os
 
-from data_integration.commands.files import ReadScriptOutput
-from data_integration.commands.sql import ExecuteSQL
-from data_integration.pipelines import Pipeline, Task
+from mara_pipelines.commands.files import ReadScriptOutput
+from mara_pipelines.commands.sql import ExecuteSQL
+from mara_pipelines.pipelines import Pipeline, Task
 
 
 def euro_exchange_rates_pipeline(db_alias: str):

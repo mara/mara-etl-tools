@@ -1,7 +1,7 @@
 import pathlib
 
-from data_integration.commands.sql import ExecuteSQL
-from data_integration.pipelines import Pipeline, Task
+from mara_pipelines.commands.sql import ExecuteSQL
+from mara_pipelines.pipelines import Pipeline, Task
 from etl_tools import config
 
 pipeline = Pipeline(

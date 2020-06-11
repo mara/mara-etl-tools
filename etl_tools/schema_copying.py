@@ -5,10 +5,10 @@ import shlex
 import mara_db.dbs
 import mara_db.postgresql
 import mara_db.shell
-from data_integration.commands import bash
-from data_integration.commands.bash import RunBash
-from data_integration.commands.sql import ExecuteSQL
-from data_integration.pipelines import Pipeline, Task, ParallelTask, Command
+from mara_pipelines.commands import bash
+from mara_pipelines.commands.bash import RunBash
+from mara_pipelines.commands.sql import ExecuteSQL
+from mara_pipelines.pipelines import Pipeline, Task, ParallelTask, Command
 from mara_page import _
 
 

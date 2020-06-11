@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0 (2020-06-11)
+
+- Adapt to renaming of `data-integration` package to `mara-pipelines`.
+
+**required changes**
+
+- Requires `mara-pipelines>=3.0.0`
+
+
 ## 3.1.1 (2020-05-25)
 
 - Fix assert_almost_equal function on handling negative results
