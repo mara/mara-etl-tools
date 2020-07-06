@@ -105,7 +105,7 @@ BEGIN
   INTO result1;
   EXECUTE query2
   INTO result2;
-  EXECUTE 'SELECT coalesce( abs((' || result2 || ' - ' || result1 || ') / nullif(' || result1 || ', 0)), 0 ) < ' ||
+  EXECUTE 'SELECT coalesce( abs((' || result2 || ' - ' || result1 || ') ::NUMERIC / nullif(' || result1 || ', 0)), 0 ) < ' ||
           percentage
   INTO succeeded;
   IF NOT succeeded
